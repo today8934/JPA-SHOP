@@ -29,7 +29,7 @@ public class OrderServiceTest {
     @Autowired OrderRepository orderRepository;
 
     @Test
-    public void 상품주문() {
+    public void 상품주문() throws Exception {
         //given
         Member member = new Member();
         member.setName("회원1");
@@ -49,12 +49,14 @@ public class OrderServiceTest {
         Order getOrder = orderRepository.findOne(orderId);
 
         System.out.println("orderId = " + orderId);
-        System.out.println("getOrder.status = " + getOrder);
+        System.out.println("getOrder.status = " + getOrder.getStatus());
 
 
 
-        //Assert.assertEquals("상품 주문시 상태는 ORDER", OrderStatus.ORDER, getOrder.getStatus());
-
+        Assert.assertEquals("상품 주문시 상태는 ORDER", OrderStatus.ORDER, getOrder.getStatus());
+        Assert.assertEquals("주문한 상품 종류 수가 정확해야 한다.", 1, getOrder.getOrderItems().size());
+        Assert.assertEquals("주문 가격은 가격 * 수량이다.", 10000 * 2, getOrder.getTotalPrice());
+        Assert.assertEquals("주문 수량만큼 재고가 줄어야 한다.", 8, book.getStockQuantity());
     }
 
     @Test
